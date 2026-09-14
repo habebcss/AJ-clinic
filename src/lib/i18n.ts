@@ -47,6 +47,7 @@ export const dict = {
 
     certsTitle: "الشهادات والدورات",
     certs: [
+      { name: "دبلوم عالي في زراعة الأسنان", body: "الهيئة الوطنية لزراعة الأسنان", year: "" },
       { name: "إتقان الترميمات الخزفية من الألف إلى الياء", body: "الجامعة الأردنية للعلوم والتكنولوجيا — المركز الاستشاري", year: "2023" },
       { name: "دورة الحشوات التجميلية الأمامية الشاملة", body: "A Direct Hand to the Esthetic World — القاهرة", year: "2024" },
       { name: "دورة علاج العصب العملية والسريرية", body: "الجمعية المصرية لزراعة الأسنان (ESOI) — القاهرة", year: "2024" },
@@ -186,6 +187,7 @@ export const dict = {
 
     certsTitle: "Certificates & Courses",
     certs: [
+      { name: "Higher Diploma in Dental Implantology", body: "National Board of Dental Implantology", year: "" },
       { name: "Mastering All Ceramic Restoration from A to Z", body: "Jordan University of Science & Technology — Consultative Center", year: "2023" },
       { name: "Comprehensive Anterior Composite Course", body: "A Direct Hand to the Esthetic World — Cairo", year: "2024" },
       { name: "Practical & Clinical Endodontics Course", body: "Egyptian Society of Oral Implantology (ESOI) — Cairo", year: "2024" },
