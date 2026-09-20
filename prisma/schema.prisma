@@ -53,3 +53,13 @@ model StaffUser {
   role         String   @default("doctor") // doctor | secretary
   createdAt    DateTime @default(now())
 }
+
+// محاولات دخول فاشلة — تُستعمل لتحديد المعدّل، وتُنظَّف تلقائياً عند أول دخول ناجح.
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  ip        String
+  username  String // للتدقيق فقط: أي حساب كان مستهدفاً
+  createdAt DateTime @default(now())
+
+  @@index([ip, createdAt])
+}
