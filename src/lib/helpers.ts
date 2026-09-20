@@ -51,3 +51,11 @@ export function toDateOnly(value: string): Date {
 export function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
+
+/**
+ * يتحقق إذا كان الخطأ صادراً عن Prisma برمز معيّن.
+ * P2025 = السطر المطلوب غير موجود، P2002 = تعارض مع قيد فريد.
+ */
+export function isPrismaError(error: unknown, code: string): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === code;
+}

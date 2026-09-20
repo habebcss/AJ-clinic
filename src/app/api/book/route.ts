@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { toDateOnly } from "@/lib/helpers";
+import { isPrismaError, toDateOnly } from "@/lib/helpers";
 import { ALL_SLOTS } from "@/lib/slots";
 
 export async function POST(request: NextRequest) {
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, appointmentId: appointment.id });
   } catch (error: unknown) {
     // القيد الفريد (date, timeSlot) بيمنع حجزين بنفس اللحظة
-    if (typeof error === "object" && error !== null && "code" in error && error.code === "P2002") {
+    if (isPrismaError(error, "P2002")) {
       return NextResponse.json(
         { error: "للأسف انحجز هذا الوقت قبلك بلحظات. اختر وقت ثاني." },
         { status: 409 }

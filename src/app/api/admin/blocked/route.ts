@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getSession, toDateOnly } from "@/lib/helpers";
+import { getSession, isPrismaError, toDateOnly } from "@/lib/helpers";
 import { ALL_SLOTS, slotsForPeriod } from "@/lib/slots";
 
 // يعرض الأوقات المقفلة.
@@ -89,7 +89,14 @@ export async function DELETE(request: NextRequest) {
   const { id, date, scope, period } = await request.json();
 
   if (id) {
-    await prisma.blockedSlot.delete({ where: { id } });
+    try {
+      await prisma.blockedSlot.delete({ where: { id } });
+    } catch (error: unknown) {
+      if (isPrismaError(error, "P2025")) {
+        return NextResponse.json({ error: "هذا الوقت مش مقفول أصلاً" }, { status: 404 });
+      }
+      throw error;
+    }
     return NextResponse.json({ success: true, removed: 1 });
   }
 
