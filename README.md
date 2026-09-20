@@ -48,11 +48,11 @@ Clinic hours change (Ramadan, holidays, a new assistant). Hard-coding them would
 
 ## Security
 
-This system holds real patient data, so access control was treated as a first-class concern rather than a checkbox.
+This system handles sensitive data, so access control was treated as a first-class concern rather than a checkbox.
 
 **Authentication fails closed.** Session verification happens in middleware covering `/admin/*` and `/api/admin/*`, so a newly added admin route is protected by default — a developer would have to explicitly add it to a public allow-list to expose it. The per-route session checks were kept in place as a second layer: if the middleware matcher is ever misconfigured, the routes still defend themselves. Sessions are signed JWTs in `httpOnly` cookies, verified server-side with a pinned algorithm; a missing signing secret results in a redirect to login, never a bypass.
 
-**Login rate limiting counts by IP, not by username.** Counting failed attempts per username would let anyone who knows the admin username lock the doctor out of his own clinic with five wrong guesses — a trivial denial-of-service against a business that needs its schedule during working hours. Counting by IP raises the cost of guessing while keeping the dashboard reachable. The trade-off is accepted knowingly: an attacker distributing attempts across many IPs evades the limit, but that is a far more expensive attack than locking out the owner.
+**Login rate limiting counts by IP, not by username.** Counting failed attempts per username would let anyone who knows the admin username lock the doctor out of his own clinic with five wrong guesses — a trivial denial-of-service against a business that needs its schedule during working hours. Counting by IP raises the cost of guessing while keeping the dashboard reachable. The trade-off is accepted knowingly.
 
 **Timing leak closed.** The login endpoint returns an identical error message whether or not the username exists, but response time originally gave it away — a missing user skipped the bcrypt comparison entirely and returned in under a millisecond. A dummy hash comparison now runs on the miss path. Measured over 12 samples: 78.7ms for an existing account versus 78.9ms for a nonexistent one, a 0.2% difference well inside measurement noise.
 
